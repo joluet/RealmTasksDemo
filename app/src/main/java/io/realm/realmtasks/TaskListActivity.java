@@ -64,7 +64,7 @@ public class TaskListActivity extends AppCompatActivity {
         }
         adapter = null;
         realm = Realm.getDefaultInstance();
-        list = realm.where(TaskListList.class).findAll();
+        list = realm.where(TaskListList.class).findAllAsync();
         list.addChangeListener(new RealmChangeListener<RealmResults<TaskListList>>() {
             @Override
             public void onChange(RealmResults<TaskListList> results) {
@@ -130,7 +130,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_add:
                 if (adapter != null) {
                     adapter.onItemAdded();

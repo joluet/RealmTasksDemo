@@ -69,7 +69,7 @@ public class TaskActivity extends AppCompatActivity {
         }
         adapter = null;
         realm = Realm.getDefaultInstance();
-        list = realm.where(TaskList.class).equalTo(TaskList.FIELD_ID, id).findAll();
+        list = realm.where(TaskList.class).equalTo(TaskList.FIELD_ID, id).findAllAsync();
         list.addChangeListener(new RealmChangeListener<RealmResults<TaskList>>() {
             @Override
             public void onChange(RealmResults<TaskList> results) {
