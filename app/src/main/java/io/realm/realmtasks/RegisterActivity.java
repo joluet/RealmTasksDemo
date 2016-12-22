@@ -30,8 +30,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
@@ -39,7 +37,6 @@ import com.google.android.gms.common.SignInButton;
 import io.realm.SyncCredentials;
 import io.realm.ObjectServerError;
 import io.realm.SyncUser;
-import io.realm.realmtasks.auth.facebook.FacebookAuth;
 import io.realm.realmtasks.auth.google.GoogleAuth;
 
 import static android.text.TextUtils.isEmpty;
@@ -52,7 +49,6 @@ public class RegisterActivity extends AppCompatActivity implements SyncUser.Call
     private EditText passwordConfirmationView;
     private View progressView;
     private View registerFormView;
-    private FacebookAuth facebookAuth;
     private GoogleAuth googleAuth;
 
     @Override
@@ -85,16 +81,6 @@ public class RegisterActivity extends AppCompatActivity implements SyncUser.Call
         registerFormView = findViewById(R.id.register_form);
         progressView = findViewById(R.id.register_progress);
 
-        // Setup Facebook Authentication
-        facebookAuth = new FacebookAuth((LoginButton) findViewById(R.id.login_button)) {
-            @Override
-            public void onRegistrationComplete(final LoginResult loginResult) {
-                UserManager.setAuthMode(UserManager.AUTH_MODE.FACEBOOK);
-                SyncCredentials credentials = SyncCredentials.facebook(loginResult.getAccessToken().getToken());
-                SyncUser.loginAsync(credentials, AUTH_URL, RegisterActivity.this);
-            }
-        };
-
         // Setup Google Authentication
         googleAuth = new GoogleAuth((SignInButton) findViewById(R.id.sign_in_button), this) {
             @Override
@@ -110,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity implements SyncUser.Call
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         googleAuth.onActivityResult(requestCode, resultCode, data);
-        facebookAuth.onActivityResult(requestCode, resultCode, data);
     }
 
     private void attemptRegister() {

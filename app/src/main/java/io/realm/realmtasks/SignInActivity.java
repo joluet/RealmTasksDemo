@@ -34,9 +34,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
@@ -45,7 +42,6 @@ import io.realm.SyncCredentials;
 import io.realm.ObjectServerError;
 import io.realm.Realm;
 import io.realm.SyncUser;
-import io.realm.realmtasks.auth.facebook.FacebookAuth;
 import io.realm.realmtasks.auth.google.GoogleAuth;
 import io.realm.realmtasks.model.TaskList;
 import io.realm.realmtasks.model.TaskListList;
@@ -60,7 +56,6 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
     private EditText passwordView;
     private View progressView;
     private View loginFormView;
-    private FacebookAuth facebookAuth;
     private GoogleAuth googleAuth;
 
     @Override
@@ -105,16 +100,6 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
             }
         }
 
-        // Setup Facebook Authentication
-        facebookAuth = new FacebookAuth((LoginButton) findViewById(R.id.login_button)) {
-            @Override
-            public void onRegistrationComplete(final LoginResult loginResult) {
-                UserManager.setAuthMode(UserManager.AUTH_MODE.FACEBOOK);
-                SyncCredentials credentials = SyncCredentials.facebook(loginResult.getAccessToken().getToken());
-                SyncUser.loginAsync(credentials, AUTH_URL, SignInActivity.this);
-            }
-        };
-
         // Setup Google Authentication
         googleAuth = new GoogleAuth((SignInButton) findViewById(R.id.google_sign_in_button), this) {
             @Override
@@ -136,7 +121,6 @@ public class SignInActivity extends AppCompatActivity implements SyncUser.Callba
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         googleAuth.onActivityResult(requestCode, resultCode, data);
-        facebookAuth.onActivityResult(requestCode, resultCode, data);
     }
 
     private void loginComplete(SyncUser user) {

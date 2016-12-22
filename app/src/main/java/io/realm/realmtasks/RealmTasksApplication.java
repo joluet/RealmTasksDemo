@@ -18,7 +18,6 @@ package io.realm.realmtasks;
 
 import android.app.Application;
 
-import com.facebook.FacebookSdk;
 
 import io.realm.Realm;
 import io.realm.log.LogLevel;
@@ -35,7 +34,6 @@ public class RealmTasksApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
-        FacebookSdk.sdkInitialize(this);
         RealmLog.setLevel(LogLevel.TRACE);
     }
 }
